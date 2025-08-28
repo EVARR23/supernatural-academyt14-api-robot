@@ -32,20 +32,20 @@ jobs:
           name: robot-framework-report
           path: logs
 
-deploy:
+  deploy:
     name: Deploy GitHub Pages
     runs-on: ubuntu-24.04
     if: always()
     needs: 
-      -test
+      - test
 
     permissions:
-      contents: read
-      pages: write
-      id-token: write
+        contents: read
+        pages: write
+        id-token: write
     environment:
-      name: github-pages
-      url: https://github.com/EVARR23/supernatural-academyt14-api-robot/report.html
+        name: github-pages
+        url: https://github.com/EVARR23/supernatural-academyt14-api-robot/report.html
 
     steps:
     - name: Setup Pages

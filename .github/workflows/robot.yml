@@ -19,10 +19,11 @@ jobs:
       - name: Instalar dependências
         run: |
           pip install robotframework
+          pip install robotframework-requests
 
       - name: Executando os testes de API do Robot
         run: |
-          robot --outputdir logs/ .
+          robot --outputdir logs/ tests/
 
       - name: Upload do relatório
         uses: actions/upload-artifact@v4

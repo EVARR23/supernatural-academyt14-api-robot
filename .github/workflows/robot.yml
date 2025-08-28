@@ -2,31 +2,31 @@ name: Robot WorkFlow
 
 on: push
 
-jobs: 
-    test:
+jobs:
+  test:
     name: Teste de API com Robot Framework
     runs-on: ubuntu-24.04
 
     steps:
-    - name: Clonar arquivos do repostiorio
-      uses: actions/checkout@v4
-    
-    - name: Configurar Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.x'
+      - name: Clonar arquivos do repositório
+        uses: actions/checkout@v4
 
-    - name: Instalar dependências
-      run: |
-        pip install robotframework
-        
-    - name: Executando os testes de API do Robot
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Instalar dependências
+        run: |
+          pip install robotframework
+
+      - name: Executando os testes de API do Robot
         run: |
           robot --outputdir logs/ .
 
-    - name: Test repost
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: robot-framework-report
-        path: logs
+      - name: Upload do relatório
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: robot-framework-report
+          path: logs

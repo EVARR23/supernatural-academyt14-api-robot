@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Clonar arquivos do repositório
+      - name: Clonar arquivos do repositórios
         uses: actions/checkout@v4
 
       - name: Configurar Python

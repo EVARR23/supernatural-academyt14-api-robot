@@ -1,6 +1,6 @@
 name: Robot WorkFlow
 
-on: push
+on: [push, WorkFlow_dispatch]  
 
 jobs:
   test:

@@ -1,42 +1,42 @@
 name: Robot WorkFlow
 
-on: [push, workflow_dispatch]
+on: [push, WorkFlow_dispatch]  
 
 jobs:
   test:
-    name: API Tests Robot Dojo
+    name: Teste de API com Robot Framework
     runs-on: ubuntu-24.04
 
     steps:
-    - name: Clonar arquivos do repositorio
-      uses: actions/checkout@v4
+      - name: Clonar arquivos do repositório
+        uses: actions/checkout@v4
 
-    - name: Configurar Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.x'
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
-    - name: Instalação das Dependencias
-      run: |
-        pip install robotframework
-        pip install robotframework-requests
+      - name: Instalar dependências
+        run: |
+          pip install robotframework
+          pip install robotframework-requests
 
-    - name: Executando os testes de API do Robot
-      run: robot --outputdir logs/ .
+      - name: Executando os testes de API do Robot
+        run: |
+          robot --outputdir logs/ tests/
 
-    - name: Test Report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: robot-framework-report
-        path: logs
+      - name: Upload do relatório
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: robot-framework-report
+          path: logs
 
   deploy:
-    name: Deploy GitHub Pages 🌐
+    name: Deploy GitHub Pages
     runs-on: ubuntu-24.04
+    needs: test
     if: always()
-    needs:
-      - test
 
     permissions:
       contents: read
@@ -44,23 +44,23 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: https://clestonv.github.io/cicd-robot/report.html
+      url: https://github.com/EVARR23/supernatural-academyt14-api-robot/report.html
 
     steps:
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
-    - name: Download Artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: robot-framework-report
-        path: results/
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: robot-framework-report
+          path: results/
 
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: results/
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: results/
 
-    - name: Deploy to Github Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

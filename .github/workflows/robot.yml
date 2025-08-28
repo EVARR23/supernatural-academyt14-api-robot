@@ -44,7 +44,7 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: https://github.com/EVARR23/supernatural-academyt14-api-robot/report.html
+      url: https://EVARR23.github.io/EVARR23/supernatural-academyt14-api-robot/report.html
 
     steps:
       - name: Setup Pages

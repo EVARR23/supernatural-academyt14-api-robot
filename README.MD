@@ -1,13 +1,13 @@
 🚀 Projeto de Automação (QA.Coders)
 
-Este projeto consiste em um trabalho de automação de testes de API, desenvolvido durante o curso QA.Coders. Utilizando o Robot Framework, o projeto testa as funcionalidades de Criação, Consulta e Edição da API de Diretorias, garantindo que todos os endpoints funcionem corretamente.
+Este projeto consiste em um trabaprojeto  de automação de testes de API, desenvolvido durante o curso QA.Coders. Utilizando o Robot Framework, o projeto testa as funcionalidades de Criação, Consulta e Edição da API de Diretorias, garantindo que todos os endpoints funcionem corretamente.
 
 🛠️ Tecnologias Utilizadas
 Robot Framework: Framework de automação de testes.
 RequestsLibrary: Biblioteca para interação com APIs REST.
 Python 3: Linguagem utilizada no desenvolvimento do projeto.
 
-Como Rodar os Testes
+Como Rodar os Testes:
 
 1. Configuração Inicial
 Clone o repositório e instale as dependências necessárias:
@@ -17,7 +17,10 @@ cd supernatural-academyt14-api-robot
 2. Executando a Suíte de Testes
 Para rodar todos os testes:
 
+----
+
 robot tests/
+--
 
 Para rodar testes específicos, utilize as tags definidas no projeto:
 

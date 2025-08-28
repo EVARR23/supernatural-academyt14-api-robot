@@ -1,0 +1,91 @@
+*** Settings ***
+Library    RequestsLibrary
+Library    Collections
+Library    String
+Resource   variables.resource
+
+*** Keywords ***
+
+Gerar Nome Diretoria
+    ${palavra_randomica}=    Generate Random String    length=9    chars=[LETTERS]
+    ${palavra_randomica}=    Convert To Lower Case    B${palavra_randomica}
+    Set Test Variable    ${BOARD_NAME}    ${palavra_randomica}
+    Log    ${BOARD_NAME}
+
+Cadastrar Diretoria
+    [Documentation]    Cadastra uma diretoria com nome dinâmico
+    [Tags]  board
+    ${headers}=    Create Dictionary    Content-Type=application/json    Authorization=${TOKEN}
+    ${body}=    Create Dictionary    boardName=${BOARD_NAME}
+    ${response}=    POST On Session    supernatural    /api/board    json=${body}    headers=${headers}
+    Should Be Equal As Integers    ${response.status_code}    201
+    ${json}=    Set Variable    ${response.json()}
+    ${board_id}=    Set Variable    ${json['newBoard']['_id']}
+    Set Suite Variable    ${BOARD_ID}    ${board_id}
+
+Cadastrar Diretoria sem bordname
+    [Documentation]    teste de cadastro de diretoria sem bordname
+    ${headers}=    Create Dictionary    Content-Type=application/json    Authorization=${TOKEN} 
+    ${body}=    Create Dictionary    boardName=
+    ${response}=    POST On Session    supernatural    /api/board    json=${body}    headers=${headers}    expected_status=400
+    ${json}=    To Json    ${response.content}    
+    Should Be Equal As Strings     ${json['error']}    ["O campo 'diretoria' é obrigatório."]
+
+Cadastrar Diretoria com Caracteres Inválidos
+    [Documentation]    Tenta cadastrar uma diretoria com caracteres inválidos
+    ${headers}=    Create Dictionary    Content-Type=application/json    Authorization=${TOKEN} 
+    ${body}=    Create Dictionary    boardName=$aude
+    ${response}=    POST On Session    supernatural    /api/board    json=${body}    headers=${headers}    expected_status=400
+    
+
+Cadastrar Diretoria com Caracteres Vazio
+    [Documentation]    Tenta cadastrar uma diretoria com caracteres vazios
+    ${headers}=    Create Dictionary    Content-Type=application/json    Authorization=${TOKEN} 
+    ${body}=    Create Dictionary    boardName=$aude
+    ${response}=    POST On Session    supernatural    /api/board    json=${body}    headers=${headers}    expected_status=400
+  
+Editar Diretoria
+    [Documentation]    Edita uma diretoria cadastrada
+    ${headers}=    Create Dictionary    Content-Type=application/json    Authorization=${TOKEN}
+    ${body}=    Create Dictionary    boardName=${BOARD_NAME}
+    ${response}=    PUT On Session      supernatural    ${BASE_URL}/api/board/${BOARD_ID}    json=${body}    headers=${headers}
+    Should Be Equal As Integers    ${response.status_code}    200
+    ${json}=    Set Variable    ${response.json()}
+    Should Be Equal As Strings    ${json['msg']}    Cadastro atualizado com sucesso.
+
+
+
+
+Editar Diretoria Com ID Inexistente
+    [Documentation]    Tenta editar uma diretoria com um ID inexistente
+    ${headers}=    Create Dictionary    Content-Type=application/json    Authorization=${TOKEN} 
+    ${body}=    Create Dictionary    boardName=${BOARD_NAME}
+    ${fake_id}=    Generate Random String    24    chars=0123456789abcdef
+    ${response}=   PUT On Session    supernatural    ${BASE_URL}/api/board/${fake_id}    json=${body}    headers=${headers}    expected_status=400
+    
+Editar Diretoria Com Campo Vazio
+    [Documentation]    Tenta editar uma diretoria com o campo boardName vazio
+    ${headers}=    Create Dictionary    Content-Type=application/json    Authorization=${TOKEN} 
+    ${body}=    Create Dictionary    boardName=
+    ${response}=   PUT On Session    supernatural   ${BASE_URL}/api/board/${BOARD_ID}   json=${body}    headers=${headers}    expected_status=400
+
+Editar Diretoria Com Caracteres Inválidos
+    [Documentation]    Tenta editar uma diretoria com caracteres inválidos
+    ${headers}=    Create Dictionary    Content-Type=application/json    Authorization=${TOKEN} 
+    ${body}=    Create Dictionary    boardName=$aude
+    ${response}=   PUT On Session    supernatural   ${BASE_URL}/api/board/${BOARD_ID}   json=${body}    headers=${headers}    expected_status=400
+
+
+
+
+
+
+Listar Diretoria
+    [Documentation]    Listar cadastros de diretorias com sucesso
+    Create Session    api    ${BASE_URL}
+    ${headers}=    Create Dictionary    Content-Type=application/json    Authorization=${TOKEN}
+    ${response}=    GET On Session    api  ${BASE_URL}/api/board     headers=${headers}
+    Should Be Equal As Integers    ${response.status_code}    200
+    ${json}=    Set Variable    ${response.json()}
+    Should Not Be Empty    ${json}
+   
